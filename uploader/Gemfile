@@ -1,0 +1,8 @@
+source 'https://rubygems.org'
+gem 'asset_sync', '~> 0.5.5', :git => "https://github.com/fountainheadpro/asset_sync.git"
+gem 'rake'
+gem 'capistrano'
+gem 'capistrano-ext'
+gem 'sinatra'
+gem 'unf'
+gem 'json'

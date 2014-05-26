@@ -32,3 +32,6 @@ end
 
 
 
+process_block(ARGV[0])
+
+

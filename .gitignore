@@ -1,4 +1,7 @@
+target/
+.metadata/
 animations
+conversion.sh
 index
 tmp
 .idea
