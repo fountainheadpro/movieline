@@ -7,4 +7,6 @@ tmp
 .idea
 *.mp4
 *.srt
-
+searcher/dictionary
+searcher/index
+seracher/.*
