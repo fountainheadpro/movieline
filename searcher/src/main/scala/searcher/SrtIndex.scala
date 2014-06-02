@@ -26,10 +26,11 @@ import scalax.file.Path
 import org.apache.lucene.search.spell.SpellChecker
 import org.apache.lucene.search.spell.PlainTextDictionary
 
+
 class SrtIndex(srtFileName: String) extends Closeable{
   
   implicit class Regex(sc: StringContext) {
-    def r = new util.matching.Regex(sc.parts.mkString, sc.parts.tail.map(_ => "x"): _*)
+    def r = new scala.util.matching.Regex(sc.parts.mkString, sc.parts.tail.map(_ => "x"): _*)
   }
  	
   private def mkDocFromBlock(blockList: Iterator[String]): Document={
@@ -42,8 +43,8 @@ class SrtIndex(srtFileName: String) extends Closeable{
       case r"\A(\d+)${position}\z" => doc.add(new IntField("id",position.toInt, Field.Store.YES))
       case r"\A(\d\d)${hs}:(\d\d)${ms}:(\d\d)${ss},(\d\d\d)$mms --> (\d\d)${he}:(\d\d)${me}:(\d\d)${se},(\d\d\d)$mme" =>{
         val start  = hs.toInt*MILLS_PER_HOUR+ms.toInt*MILLS_PER_MIN+ss.toInt*MILLS_PER_SEC+mms.toInt
-        val end    = he.toInt*MILLS_PER_HOUR+me.toInt*MILLS_PER_MIN+se.toInt*MILLS_PER_SEC+mme.toInt
-        val length = end-start
+        val end    = he.toInt*MILLS_PER_HOUR+me.toInt*MILLS_PER_MIN+se.toInt*MILLS_PER_SEC+mme.toInt        
+        val length = end-start        
 	    doc.add(new IntField("start", start, Field.Store.YES))
 	    doc.add(new IntField("end", end, Field.Store.YES))
 	    doc.add(new IntField("length", length, Field.Store.YES))        
@@ -93,7 +94,7 @@ class SrtIndex(srtFileName: String) extends Closeable{
   val dictFileName=s"./dictionary/${Path.fromString(srtFileName).name}.dict"
   
   def createDictionary()={    
-
+	/*  
     val path: Path = Path.fromString(dictFileName)
     path.createFile(failIfExists=false)
 
@@ -110,14 +111,14 @@ class SrtIndex(srtFileName: String) extends Closeable{
       }
       tokenStream.close()
     })
-    Resource.fromFile(dictFileName).writeStrings(dict, "\n")
+    Resource.fromFile(dictFileName).writeStrings(dict, "\n")*/
     new SpellChecker(
       FSDirectory.open(new File("./dictionary/"))
       ).indexDictionary(
-        new PlainTextDictionary(new File(dictFileName)),
+        new PlainTextDictionary(new File(srtFileName)),
         new IndexWriterConfig(Version.LUCENE_48,analyzer),
         true
-      )    
+      )   
   }
   
   val spellchecker=new SpellChecker(FSDirectory.open(new File("./dictionary/"))) 

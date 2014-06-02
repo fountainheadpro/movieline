@@ -22,7 +22,11 @@ libraryDependencies ++= Seq(
   "org.scala-lang"          % "scala-reflect"         % "2.10.2",
   "org.specs2"             %% "specs2"                % "1.14"         % "test",
   "com.typesafe.akka"      %% "akka-testkit"          % "2.2.0"        % "test",
-  "com.novocode"            % "junit-interface"       % "0.7"          % "test->default"
+  "com.novocode"            % "junit-interface"       % "0.7"          % "test->default",
+  "io.spray"                % "spray-can"             % "1.3.1",
+  "io.spray"                % "spray-client"          % "1.3.1",
+  "io.spray"                % "spray-routing"         % "1.3.1",
+  "io.spray"               %%  "spray-json"           % "1.2.6"
 )
 
 resolvers ++= Seq(
