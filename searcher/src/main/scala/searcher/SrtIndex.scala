@@ -40,7 +40,7 @@ class SrtIndex(srtFileName: String) extends Closeable{
     val doc=new Document
     var speech=ArrayBuffer[String]()
     blockList.foreach(line=>line match{
-      case r"\A(\d+)${position}\z" => doc.add(new IntField("id",position.toInt, Field.Store.YES))
+      case r"\A(\d+)${position}\z" => doc.add(new IntField("key",position.toInt, Field.Store.YES))
       case r"\A(\d\d)${hs}:(\d\d)${ms}:(\d\d)${ss},(\d\d\d)$mms --> (\d\d)${he}:(\d\d)${me}:(\d\d)${se},(\d\d\d)$mme" =>{
         val start  = hs.toInt*MILLS_PER_HOUR+ms.toInt*MILLS_PER_MIN+ss.toInt*MILLS_PER_SEC+mms.toInt
         val end    = he.toInt*MILLS_PER_HOUR+me.toInt*MILLS_PER_MIN+se.toInt*MILLS_PER_SEC+mme.toInt        
@@ -54,8 +54,7 @@ class SrtIndex(srtFileName: String) extends Closeable{
      doc.add(new TextField("content", speech.mkString(" "), Field.Store.YES))     
      doc
   }
-  
-  
+   
   val analyzer=new EnglishAnalyzer(Version.LUCENE_48)
   lazy val directory=FSDirectory.open(new File("./index"))
   lazy val indexReader =  DirectoryReader.open(directory)
@@ -121,7 +120,9 @@ class SrtIndex(srtFileName: String) extends Closeable{
       )   
   }
   
-  val spellchecker=new SpellChecker(FSDirectory.open(new File("./dictionary/"))) 
+  val spellchecker=new SpellChecker(FSDirectory.open(new File("./dictionary/")))
+  
+  val animDirectory=s"../animation/"
       
     
 }

@@ -30,6 +30,9 @@ class SearchService(searchActor: ActorRef)(implicit executionContext: ExecutionC
   
   //val log = Logging(context.system, this)
   val  decoder = new BASE64Decoder();
+  
+  implicit val SceneFormat=jsonFormat3(Scene)
+  implicit val ClipFormat = jsonFormat1(Clip)
 
     
   val route =
@@ -41,7 +44,7 @@ class SearchService(searchActor: ActorRef)(implicit executionContext: ExecutionC
           RawHeader("Access-Control-Allow-Headers", "X-Requested-With,Content-Type, X-Prototype-Version")
           ){parameters('encodedString){(encodedString:String)=>            
     	      complete { 	    	      
-    	        (searchActor ? SearchRequest(new String(decoder.decodeBuffer(encodedString)))).mapTo[SearchResults] 
+    	        (searchActor ? SearchRequest(new String(decoder.decodeBuffer(encodedString)))).mapTo[Clip] 
     	      }
             }          
           }    

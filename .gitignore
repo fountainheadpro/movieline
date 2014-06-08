@@ -9,4 +9,5 @@ tmp
 *.srt
 searcher/dictionary
 searcher/index
-seracher/.*
+example
+searcher/.*

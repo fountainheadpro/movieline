@@ -6,8 +6,10 @@ import searcher.SrtIndex
 
 
 object SearchProtocol{
-  case class Rebuild
-  case class SearchResults(urls:List[String])
+  case object Rebuild
+  case object RebuildComplete
+  case class Scene(id: String, url: String, caption: String)
+  case class Clip(scenes:Seq[Scene])
   case class SearchRequest(searchString:String)
 }
 
@@ -26,12 +28,18 @@ class SearchActor extends Actor{
 	  if (praseQ.isDefined){ 
 	    val searcher=index.searcher
 	    val query = index.queryBuilder.createPhraseQuery("content", praseQ.get);
-	    val hits = searcher.search(query, null, 5).scoreDocs;	    
-	    hits.map{_.doc}
+	    val hits = searcher.search(query, null, 5).scoreDocs;
+	    
+	    sender ! Clip(hits.map{hit=>	      
+	      val doc=index.searcher.doc(hit.doc)
+	      Scene(doc.get("key"), linkFromDoc(doc.get("key")), doc.get("content"))
+	    })
 	  }
     }
-    case r:Rebuild=>index.buildIndex    
+    case Rebuild=>index.buildIndex; sender!RebuildComplete    
   }
+  
+  def linkFromDoc(key: String)=s"http://anim.livelin.es/animation_${key.toInt-1}_1.gif"
   
   override def postStop=index.close
   

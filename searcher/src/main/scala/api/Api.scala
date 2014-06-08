@@ -16,10 +16,10 @@ trait Api extends RouteConcatenation {
 
   private implicit val _ = system.dispatcher
 
-  val routes = new SearchService(profileChanger).route 
+  val routes = new SearchService(searchActor).route 
 
-  //val props=Props(new RoutedHttpService(routes))
+  val props=Props(new RoutedHttpService(routes))
   
-  //val rootService = system.actorOf(props)
+  val rootService = system.actorOf(props)
 
 }
