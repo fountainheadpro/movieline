@@ -9,6 +9,8 @@
 
 module.exports = function (grunt) {
 
+  grunt.loadNpmTasks('grunt-react');
+
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
 
@@ -49,6 +51,10 @@ module.exports = function (grunt) {
       gruntfile: {
         files: ['Gruntfile.js']
       },
+      react: {
+        files: ['<%= yeoman.app %>/views/jsx/*.jsx'],
+        tasks: ['react:dynamic_mappings']
+      },
       livereload: {
         options: {
           livereload: '<%= connect.options.livereload %>'
@@ -59,6 +65,20 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
+    },
+
+    react: {
+      dynamic_mappings: {
+            files: [
+              {
+                expand: true,
+                cwd: '<%= yeoman.app %>/views/jsx',
+                src: ['**/*.jsx'],
+                dest: '<%= yeoman.app %>/scripts/views/',
+                ext: '.js'
+              }
+            ]
+          }     
     },
 
     // The actual grunt server settings
@@ -383,6 +403,7 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'wiredep',
+      'react',
       'concurrent:server',
       'autoprefixer',
       'connect:livereload',
@@ -425,4 +446,6 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
+
+
 };
