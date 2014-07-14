@@ -1,10 +1,12 @@
-package searcher
+package actions.movieline.searcher
+
+import actions.movieline.searcher.SrtIndex
 
 object Searcher extends App{
 
   val index=SrtIndex("/Users/szelvenskiy/movieline/pulp_fiction.srt")
   index.buildIndex
-  val suggestions=index.spellchecker.suggestSimilar("Yack", 5)
+  /*val suggestions=index.spellchecker.suggestSimilar("Yack", 5)
   val praseQ: Option[String]=suggestions.headOption
   
   if (praseQ.isDefined){ 
@@ -17,7 +19,7 @@ object Searcher extends App{
         println(searcher.doc(hit.doc))
         println(hit.score)
     })
-  }
+  }*/
   index.close
     
 }

@@ -11,3 +11,4 @@ searcher/dictionary
 searcher/index
 example
 searcher/.*
+movieline/.*

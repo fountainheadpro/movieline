@@ -1,14 +1,16 @@
-package searcher.actors
+package actions.movieline.actors
 
 import akka.actor.Actor
 import akka.actor.actorRef2Scala
-import searcher.SrtIndex
+import org.apache.lucene.document.Document
+import scala.Array.fallbackCanBuildFrom
+import actions.movieline.searcher.SrtIndex
 
 
 object SearchProtocol{
   case object Rebuild
   case object RebuildComplete
-  case class Scene(id: String, url: String, caption: String)
+  case class Scene(id: String, urls: Seq[String], caption: String)
   case class Clip(scenes:Seq[Scene])
   case class SearchRequest(searchString:String)
 }
@@ -23,23 +25,25 @@ class SearchActor extends Actor{
     case SearchRequest(searchString)=>{	  
 	  //index.buildIndex
 	  val suggestions=index.spellchecker.suggestSimilar(searchString, 5)
-	  val praseQ: Option[String]=suggestions.headOption
+	  val praseQ: Option[String]=suggestions.headOption	  
 	  
 	  if (praseQ.isDefined){ 
 	    val searcher=index.searcher
 	    val query = index.queryBuilder.createPhraseQuery("content", praseQ.get);
 	    val hits = searcher.search(query, null, 5).scoreDocs;
-	    
-	    sender ! Clip(hits.map{hit=>	      
+	    val result = hits.map{hit=>	      
 	      val doc=index.searcher.doc(hit.doc)
-	      Scene(doc.get("key"), linkFromDoc(doc.get("key")), doc.get("content"))
-	    })
+	      Scene(doc.get("key"), linksFromDoc(doc), doc.get("content"))
+	    }
+	    sender ! result
 	  }
     }
     case Rebuild=>index.buildIndex; sender!RebuildComplete    
   }
   
-  def linkFromDoc(key: String)=s"http://anim.livelin.es/animation_${key.toInt-1}_1.gif"
+  def linksFromDoc(doc: Document)=
+    for(scene<-1 to doc.getField("numberOfScenes").numericValue().intValue()) 
+    yield s"http://anim.livelin.es/animation_${doc.get("key")}_$scene.gif"
   
   override def postStop=index.close
   

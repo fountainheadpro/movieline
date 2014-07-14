@@ -1,7 +1,7 @@
 package web
 
 import akka.actor.{Props, ActorSystem}
-import searcher.actors.SearchActor
+import actions.movieline.actors.SearchActor
 
 /**
  * Core is type containing the ``system: ActorSystem`` member. This enables us to use it in our

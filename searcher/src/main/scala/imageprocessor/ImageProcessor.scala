@@ -1,7 +1,7 @@
 package imageprocessor
 
 import scala.sys.process._
-import searcher.SrtIndex
+import actions.movieline.searcher.SrtIndex
 import org.apache.lucene.document.Document
 import java.io.PrintWriter
 import java.io.File

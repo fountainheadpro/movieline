@@ -2,29 +2,33 @@
 
   var SearchBox = React.createClass({
     getInitialState: function() {
+      this.props.scope.query="Zed's dead...";
       return {
         prompt: "Zed's dead...",
-        query: ""
+        query: "Zed's dead..."
       };
-    },    
+    },  
 
-    handleChange: function() {
-        //this.props.onUserInput(
-        //   this.refs.filterTextInput.getDOMNode().value,            
-        //);
-    },    
+    handleChange: function(){
+      var _this=this;
+      this.state.query=this.refs.quoteTextInput.getDOMNode().value; 
+      var scope=this.props.scope
+      scope.search(this.state.query);
+    }, 
 
-    render: function() {
+    render: function() {     
         return (
-            <form>
+            <form onSubmit={this.handleChange}>
               <div className="searchContainer" >
                 <input 
                   type="text" 
+                  ng-model="search.query"
                   className="searchBar" 
                   placeholder={this.state.prompt} 
-                  ref="filterTextInput"
-                  value={this.props.query} />
-                <span className="glyphicon glyphicon-search searchButton"></span>
+                  ref="quoteTextInput" 
+                  //value={this.state.query} 
+                  />
+                <span className="glyphicon glyphicon-search searchButton"  ></span>
               </div>  
             </form>
         );
@@ -37,7 +41,7 @@ var Scene=React.createClass({
     return (
           <div className="col-sm-6 col-md-6">
             <div className="thumbnail" onClick={this.handleClick}>      
-              <img src={this.props.scene.imageSource} alt={this.props.scene.caption}/>                          
+              <img src={this.props.scene.urls[0]} alt={this.props.scene.caption}/>                          
               <blockquote>
                 <p>{this.props.scene.caption}</p>
               </blockquote>
@@ -57,9 +61,10 @@ var Clip = React.createClass({
     render: function() {
       ///var scope = this.props.scope;
       var images = [];
+
       this.props.scope.data.forEach(function(scene){
         images.push(
-              <Scene scene={scene} key={scene.key}/>
+              <Scene scene={scene} key={scene.id}/>
             )
       }.bind(this));
       return (

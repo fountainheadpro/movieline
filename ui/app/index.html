@@ -36,77 +36,7 @@
         <p><span class="glyphicon glyphicon-heart"></span> from the Yeoman team</p>
       </div>
     </div>
-
-
- <script type="text/jsx">
-/** @jsx React.DOM */
-
-
-  var SearchBox = React.createClass({
-    getInitialState: function() {
-      return {
-        prompt: "Zed's dead",
-        query: ""
-      };
-    },    
-
-    handleChange: function() {
-        //this.props.onUserInput(
-        //   this.refs.filterTextInput.getDOMNode().value,            
-        //);
-    },    
-
-    render: function() {
-        return (
-            <form>
-                <input 
-                  type="text" 
-                  className="searchBar" 
-                  placeholder={this.props.prompt} 
-                  ref="filterTextInput"
-                  value={this.props.query} />
-            </form>
-        );
-    }
-  });
-
-
-var Scene=React.createClass({
-  render: function(){
-    return (
-          <div className="col-sm-6 col-md-6">
-            <div className="thumbnail">      
-              <a href="#" className="thumbnail">
-                <img src={this.props.scene.imageSource} alt={this.props.scene.caption}/>                          
-              </a> 
-              <blockquote>
-                <p>{this.props.scene.caption}</p>
-              </blockquote>
-            </div>
-          </div>                   
-    )    
-  }
-});  
-
-/** @jsx React.DOM */
-var Clip = React.createClass({
-    render: function() {
-      ///var scope = this.props.scope;
-      var images = [];
-      this.props.scope.data.forEach(function(scene){
-        images.push(
-              <Scene scene={scene} key={scene.key}/>
-            )
-      }.bind(this));
-      return (
-          <div className="thumbnails">
-            {images}
-          </div>
-      )      
-    }
-});
-
-</script>    
+ 
 
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
