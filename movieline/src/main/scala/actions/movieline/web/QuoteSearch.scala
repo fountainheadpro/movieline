@@ -24,7 +24,7 @@ class QuoteSearch(system:ActorSystem, searcher:ActorRef)
 {
 
   import _root_.akka.pattern.ask
-  implicit val defaultTimeout = Timeout(10)
+  implicit val defaultTimeout = Timeout(1000)
   
   protected implicit val jsonFormats: Formats = DefaultFormats
   val logger =  LoggerFactory.getLogger(getClass)
